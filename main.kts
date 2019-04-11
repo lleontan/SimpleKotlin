@@ -3,14 +3,79 @@
 println("UW Homework: Simple Kotlin")
 
 // write a "whenFn" that takes an arg of type "Any" and returns a String
+fun whenFn(arg1:Any):String{
+  when(arg1){
+    "Hello" -> return "world"
+    "Howdy","Bonjour" -> return "Say what?"
+    0 -> return "zero"
+    1 -> return "one"
+    in 2..10 -> return "low number"
+    is Int -> return "a number"
+    else -> {
+      return "I don't understand"
+    }
+  }
+}
 
 // write an "add" function that takes two Ints, returns an Int, and adds the values
+fun add(int1:Int, int2:Int):Int{
+  return int1+int2
+}
 // write a "sub" function that takes two Ints, returns an Int, and subtracts the values
+fun sub(int1:Int, int2:Int):Int{
+  return int1-int2
+}
 // write a "mathOp" function that takes two Ints and a function (that takes two Ints and returns an Int), returns an Int, and applies the passed-in-function to the arguments
-
+fun mathOp(int1:Int, int2:Int, func:(intArg1:Int,intArg2:Int)->Int):Int{
+  return func(int1,int2)
+}
 // write a class "Person" with first name, last name and age
-
+class Person constructor(val firstName:String, val lastName:String, var age:Int){
+  fun equals(newPerson:Person):Boolean{
+    return newPerson.firstName==firstName&&newPerson.lastName==lastName&&newPerson.age==age
+  }
+  val debugString:String
+  get(){
+    return "[Person firstName:${firstName} lastName:${lastName} age:${age}]"
+  }
+  override fun hashCode():Int{
+    return firstName.hashCode()+lastName.hashCode()+age.hashCode()
+  }
+}
 // write a class "Money"
+class Money{
+  constructor(newAmount:Int, newCurrency:String){
+    amount=newAmount
+    currency=newCurrency
+  }
+  var amount: Int
+    set(value:Int) {
+        if(value<0){
+          field=0
+        }else{
+          field=value
+        }
+    }
+    var currency: String
+      set(value:String) {
+          when(value){
+            "USD", "EUR", "CAN", "GBP"->field=value
+            else ->{
+              throw Exception("Invalid Currency")
+            }
+          }
+      }
+      private val rates:HashMap<String, Double> = hashMapOf("USD" to 1.0, "GBP" to .5, "EUR" to 1.5, "CAN" to 1.25)
+
+      fun convert(newCurrency:String):Money{
+        return Money((amount*(rates[newCurrency]!!)/(rates[currency]!!)).toInt(),newCurrency)
+      }
+      operator fun plus(newMoney:Money):Money{
+        val convertedMoney=newMoney.convert(currency)
+        val newAmount=convertedMoney.amount+amount
+        return Money(newAmount,currency)
+      }
+}
 
 // ============ DO NOT EDIT BELOW THIS LINE =============
 
